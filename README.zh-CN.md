@@ -37,6 +37,22 @@
 >
 > Node.js **≥18**。Windows 无闪窗需要 **Node ≥22**。插件市场一键安装和下面的命令都走 npm 包 `dsh-purge`。
 
+> **本分支：已适配 dsh 0.2.2-rc.1。** 原上游已删库，`package.json` 里的安装地址改指本仓库，直接装：`dsh plugin --profile web add github:zhouguiming6-dev/dsh-purge`。
+>
+> 装完先自检，别只看面板上的「已应用」：
+>
+> ```bash
+> dsh-purge --verify     # 补丁实检 + 扫 12 条官方拒绝面签名，命中会报文件和行号
+> ```
+>
+> 宿主升级（重装内置运行时）会把 `/opt/dsh` 换回官方原版，补丁和 `.dshpurge.bak` 一起消失。升级后跑一次重打：
+>
+> ```bash
+> npm run repair         # 核对本地强化层 → --apply → --verify
+> npm run repair:check   # 只看不写
+> ```
+
+
 ## 目录
 
 - [赞助](#sponsor)

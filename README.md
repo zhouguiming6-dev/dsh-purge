@@ -37,6 +37,22 @@
 >
 > Node.js **≥18**. Windows no-flash needs **Node ≥22**. Hub one-click and the commands below both install the npm package `dsh-purge`.
 
+> **This branch targets dsh 0.2.2-rc.1.** The original upstream is deleted, so the install URLs in `package.json` point here: `dsh plugin --profile web add github:zhouguiming6-dev/dsh-purge`.
+>
+> Verify after installing instead of trusting the "applied" badge:
+>
+> ```bash
+> dsh-purge --verify     # real per-patch status + 12 official restriction signatures, with file and line
+> ```
+>
+> A host upgrade (runtime reinstall) puts `/opt/dsh` back to stock and takes the patches and `.dshpurge.bak` with it. Re-apply afterwards:
+>
+> ```bash
+> npm run repair         # check local layer → --apply → --verify
+> npm run repair:check   # read-only
+> ```
+
+
 ## Contents
 
 - [Sponsor](#sponsor)

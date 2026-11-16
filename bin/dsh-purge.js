@@ -36,11 +36,12 @@ function printStatus(state) {
 }
 
 async function main() {
-  const mode = args.find((a) => ["--apply", "--revert", "--uninstall", "--status", "--edit", "--help"].includes(a));
+  const mode = args.find((a) => ["--apply", "--verify", "--revert", "--uninstall", "--status", "--edit", "--help"].includes(a));
 
   if (mode === "--help" || args.includes("-h")) {
     console.log(`dsh-purge 用法:
   dsh-purge --status     显示状态
+  dsh-purge --verify     自检：补丁计数 + 扫描宿主里残留的拒绝文案
   dsh-purge --apply      应用全部清洗（提示词+代码+shim+override）
   dsh-purge --revert     回滚还原
   dsh-purge --uninstall  卸载插件（已应用则先还原）
@@ -95,6 +96,24 @@ async function main() {
     }
     console.log("");
     console.log("全部完成 / All done。重启 dsh 生效 / Restart dsh to take effect.");
+  } else if (mode === "--verify") {
+    if (!state.ai_base) {
+      console.log("[ERROR] " + core.missingAiBaseMessage());
+      process.exit(1);
+    }
+    const { verifyUnlock, RESTRICTION_SIGNATURES } = await import("../lib/verify.js");
+    const r = await verifyUnlock(state.ai_base);
+    const parts = Object.entries(r.counts).map(([k, v]) => `${k}=${v}`);
+    console.log(`  自检 / verify: 文件 ${r.files_scanned} 个, ${parts.join(", ")}`);
+    console.log(`  拒绝面签名 ${RESTRICTION_SIGNATURES.length} 条`);
+    if (r.leftovers.length === 0) {
+      console.log("  ✓ 没有残留拒绝面 / no restriction surface left");
+    } else {
+      for (const x of r.leftovers) {
+        console.log(`  ✗ ${x.label}: ${x.file}:${x.line}`);
+      }
+      console.log("  先 --apply，再重启 dsh；仍命中说明该句在新版换了写法，需补 needle。");
+    }
   } else if (mode === "--revert") {
     if (state.ai_base || core.enumeratePatchAiBases().length) {
       const { reverted, errors } = await core.revertAllHosts();
