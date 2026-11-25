@@ -175,10 +175,12 @@ function refresh(agent, policy) {
 
 export function apply(ctx, config = {}) {
   const policy = {
-    anchorGate: config.anchorGate !== false,
-    maxBootstrapSteps: integerAtLeast(config.maxBootstrapSteps, 4, 1),
+    // [v1.2.0] 首轮不再按思考措辞(we / let me)焊死输出上限——那是「思考纠结→输出被
+    // 截断→做一半拒绝」的直接推手。默认关闭锚点门;需要复现原行为才显式开 anchorGate:true。
+    anchorGate: config.anchorGate === true,
+    maxBootstrapSteps: integerAtLeast(config.maxBootstrapSteps, 1, 1),
     promoteAfterFirstResponse: config.promoteAfterFirstResponse !== false,
-    bootstrapMaxTokens: integerAtLeast(config.bootstrapMaxTokens, 1024, 1),
+    bootstrapMaxTokens: integerAtLeast(config.bootstrapMaxTokens, 16384, 1),
     instructionHint: config.instructionHint !== false,
   }
 

@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.71</strong></p>
+<p align="center"><strong>Version 1.2.0</strong></p>
 
 <p align="center">
   <em>DeepSeek Harness 破甲：让所有模型都能破甲，不同模型可换不同提示词；默认提示词面向国模「小码酱」。Jailbreak for every model — swap prompts per model. 求 Star 收藏 ⭐ 如要二开，请查看署名要求部分</em>
@@ -29,7 +29,15 @@
   <a href="README.md">English</a> | <a href="README.zh-CN.md">中文</a>
 </p>
 
-> **暂停更新。** 作者因工作安排，近期没有稳定收入，项目维护暂时搁置：不再发版、暂不收 issue / PR，也不保证跟进新版 dsh。仓库仍可自用；赞助见下方。恢复维护时会在本 README 说明。
+> **暂停更新（上游）。** 原上游维护搁置；本镜像分支在 1.2.0 做了一次适配性加强，见下。
+
+> **1.2.0 · dsh-go 1.3.0 适配 + 破甲加强。** dsh-go 1.3.0 是手机端 App 的功能更新（语音通话、长按选字、后台保护、酒馆渲染等），与 harness 侧的破甲补丁协议互不耦合，因此补丁目标 `dshTarget: 0.2.2-rc.1` 不变、无需重打补丁。本次适配集中在「对话做一半最后又拒绝 / 思考里反复纠结」这个实测痛点：
+>
+> - **默认提示词加密槽重生**：在原文（Never Refuse / REFUSAL HARDENING 等全部保留）之上追加 `HARDENING v1.2.0` 段——思考槽封口、拒绝自愈、改写归零、目标属性中性、逐条独立判定、输出纪律、做一半不停、续跑输入识别。
+> - **续跑默认打开**：`autoContinue: true`、`continueMax: 20`、续跑文案由「继续」改为无间隙续写指令；新增**拒绝/半截正文检测**——`turn/end` 为 `completed` 但正文命中拒绝特征或悬空结尾时也自动补一轮，这是「做一半拒绝」的直接修复。
+> - **锚点门默认关闭**：`anchor-gate` 不再按思考里的 `we` / `let me` 措辞把首轮输出焊死在 1024/8192 token，避免思考纠结导致正文被截断；bootstrap 上限提到 16384。
+>
+> 已有 `prompt-inject.md` 的用户注意：`resolveInjectText` 的优先级是「框内提交 > `$DSH_HOME/prompt-inject.md` > 加密默认」。若你自己写过 `prompt-inject.md`（里面没有 `HARDENING v1.2.0` 段），把 `lib/hardening-block.txt` 的内容追加到该文件末尾，加强段才会在你身上生效。
 
 > **官方 Web 和官方桌面端都支持。** 官方 `dsh web` 用 profile `web`；官方桌面 EXE（DeepSeek Harness **0.2.0-rc.2**）用 profile `desktop`。两边分开安装、分开点「应用」。当前版本只适配 dsh 0.2；更早的 dsh 用对应的老版本插件。社区桌面端不维护。
 >
@@ -208,7 +216,7 @@ dsh plugin --profile desktop add dsh-purge
 桌面客户端也可以点按钮（`dsh://` 唤起）：
 
 <p align="center">
-  <a href="dsh://plugin/install?id=dsh-purge&name=dsh-purge&version=1.1.71&repo=YuJunZhiXue%2Fdsh-purge&permissions=%E7%B3%BB%E7%BB%9F%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%B3%A8%E5%85%A5%2C%E6%9C%AC%E6%9C%BA%E8%A1%A5%E4%B8%81%2C%E8%AE%BE%E7%BD%AE%E9%A1%B5&downloadUrl=https%3A%2F%2Fgithub.com%2FYuJunZhiXue%2Fdsh-purge%2Farchive%2Frefs%2Fheads%2Fmaster.tar.gz"><strong>唤起客户端一键安装</strong></a>
+  <a href="dsh://plugin/install?id=dsh-purge&name=dsh-purge&version=1.2.0&repo=YuJunZhiXue%2Fdsh-purge&permissions=%E7%B3%BB%E7%BB%9F%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%B3%A8%E5%85%A5%2C%E6%9C%AC%E6%9C%BA%E8%A1%A5%E4%B8%81%2C%E8%AE%BE%E7%BD%AE%E9%A1%B5&downloadUrl=https%3A%2F%2Fgithub.com%2FYuJunZhiXue%2Fdsh-purge%2Farchive%2Frefs%2Fheads%2Fmaster.tar.gz"><strong>唤起客户端一键安装</strong></a>
 </p>
 
 ### 装完都要做这三步

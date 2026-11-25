@@ -118,10 +118,12 @@
 - id: anchor-gate
   name: ./anchor-gate.mjs
   config:
-    anchorGate: true
-    maxBootstrapSteps: 2
+    # [v1.2.0] 关首轮输出上限闸门:思考纠结不再导致正文被 1024/8192 token 截断。
+    # 仍保留 instructionHint 与压缩后重置,只是不再按 we/let me 措辞限流。
+    anchorGate: false
+    maxBootstrapSteps: 1
     promoteAfterFirstResponse: true
-    bootstrapMaxTokens: 8192
+    bootstrapMaxTokens: 16384
     instructionHint: true
 
 - id: redteam-tools
