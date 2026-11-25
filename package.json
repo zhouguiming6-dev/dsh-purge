@@ -1,7 +1,7 @@
 {
   "name": "dsh-purge",
-  "version": "1.2.0",
-  "description": "DeepSeek Harness 破甲（1.2.0 续跑与思考槽加强 / dsh-go 1.3.0 适配 / mirror of YuJunZhiXue/dsh-purge）",
+  "version": "1.2.1",
+  "description": "DeepSeek Harness 破甲（1.2.1 续跑与思考槽加强 + 露骨题材修复 / dsh-go 1.3.0 适配 / mirror of YuJunZhiXue/dsh-purge）",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
